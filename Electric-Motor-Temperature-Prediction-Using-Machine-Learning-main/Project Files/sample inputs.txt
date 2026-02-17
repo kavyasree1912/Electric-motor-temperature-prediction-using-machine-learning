@@ -1,0 +1,38 @@
+1. Normal Operating State (Safe - Green)
+Ambient Temperature: 20.0 °C
+
+Coolant Temperature: 25.0 °C
+
+Motor Speed: 1200 RPM
+
+u_q / u_d: Low values (e.g., 5.0)
+
+i_q / i_d: Low values (e.g., 2.0)
+
+Result: The motor is cool and running efficiently.
+
+2. High Load / Warning State (Warning - Yellow)
+Ambient Temperature: 35.0 °C
+
+Coolant Temperature: 50.0 °C
+
+Motor Speed: 3500 RPM
+
+u_q / u_d: Medium values (e.g., 40.0)
+
+i_q / i_d: Medium values (e.g., 50.0)
+
+Result: Increased speed and ambient heat cause the rotor to warm up significantly.
+
+3. Overheating / Stress State (Danger - Red)
+Ambient Temperature: 45.0 °C (Hot day)
+
+Coolant Temperature: 85.0 °C (Cooling system struggling)
+
+Motor Speed: 5000+ RPM (High speed)
+
+u_q / u_d: High values (e.g., 100.0)
+
+i_q / i_d: High values (e.g., 120.0)
+
+Result: The model should predict a very high PM temperature, triggering the 🚨 HIGH TEMPERATURE alert.
