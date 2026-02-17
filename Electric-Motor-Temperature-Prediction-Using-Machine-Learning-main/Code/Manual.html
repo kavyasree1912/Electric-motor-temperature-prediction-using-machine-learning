@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Electric Motor Temp Predictor</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: #f2f6fc;
+      font-family: 'Poppins', sans-serif;
+    }
+    .container {
+      max-width: 700px;
+      margin-top: 60px;
+      padding: 30px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      font-weight: 700;
+      color: #004080;
+    }
+    #resultBox {
+      transition: all 0.4s ease;
+      font-weight: 500;
+    }
+    footer {
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2 class="text-center mb-4">Electric Motor Temp Predictor 🔥</h2>
+  <form id="predictionForm">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="ambient" class="form-label">Ambient Temperature (°C)</label>
+        <input type="number" step="any" class="form-control" id="ambient" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="coolant" class="form-label">Coolant Temperature (°C)</label>
+        <input type="number" step="any" class="form-control" id="coolant" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="u_d" class="form-label">U_d Voltage (V)</label>
+        <input type="number" step="any" class="form-control" id="u_d" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="u_q" class="form-label">U_q Voltage (V)</label>
+        <input type="number" step="any" class="form-control" id="u_q" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="motor_speed" class="form-label">Motor Speed (RPM)</label>
+        <input type="number" step="any" class="form-control" id="motor_speed" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="torque" class="form-label">Torque (Nm)</label>
+        <input type="number" step="any" class="form-control" id="torque" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="i_d" class="form-label">I_d Current</label>
+        <input type="number" step="any" class="form-control" id="i_d" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="i_q" class="form-label">I_q Current</label>
+        <input type="number" step="any" class="form-control" id="i_q" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="pm" class="form-label">Permanent Magnet Temp (°C)</label>
+        <input type="number" step="any" class="form-control" id="pm" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="stator_yoke" class="form-label">Stator Yoke Temp (°C)</label>
+        <input type="number" step="any" class="form-control" id="stator_yoke" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="stator_tooth" class="form-label">Stator Tooth Temp (°C)</label>
+        <input type="number" step="any" class="form-control" id="stator_tooth" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="stator_winding" class="form-label">Stator Winding Temp (°C)</label>
+        <input type="number" step="any" class="form-control" id="stator_winding" required>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">🔍 Predict Temperature</button>
+  </form>
+
+  <div class="text-center mt-4 d-none" id="loader">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Predicting temperature...</p>
+  </div>
+
+  <div class="alert alert-info text-center mt-4 d-none" id="resultBox"></div>
+</div>
+
+<footer class="text-center text-muted">
+  <small>© 2025 Electric Motor AI Predictor | Made with ❤️</small>
+</footer>
+
+<script>
+  const form = document.getElementById("predictionForm");
+  const resultBox = document.getElementById("resultBox");
+  const loader = document.getElementById("loader");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    resultBox.classList.add("d-none");
+    loader.classList.remove("d-none");
+
+    const features = [
+      "ambient", "coolant", "u_d", "u_q", "motor_speed", "torque",
+      "i_d", "i_q", "pm", "stator_yoke", "stator_tooth", "stator_winding"
+    ].map(id => parseFloat(document.getElementById(id).value));
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ features })
+      });
+
+      const result = await response.json();
+      loader.classList.add("d-none");
+
+      if (result.prediction !== undefined) {
+        resultBox.classList.remove("d-none");
+        resultBox.classList.replace("alert-danger", "alert-info");
+        resultBox.textContent = `✅ Predicted Motor Temperature: ${result.prediction.toFixed(2)} °C`;
+      } else {
+        throw new Error(result.error || "Unknown error");
+      }
+    } catch (error) {
+      loader.classList.add("d-none");
+      resultBox.classList.remove("d-none");
+      resultBox.classList.replace("alert-info", "alert-danger");
+      resultBox.textContent = "❌ Prediction failed. " + error.message;
+    }
+  });
+</script>
+
+</body>
+</html>

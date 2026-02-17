@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Electric Motor Temperature Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <div class="container mx-auto px-4 py-12">
+        <h1 class="text-3xl font-bold text-center mb-8">Electric Motor Temperature Prediction</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Manual Prediction -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Manual Prediction</h2>
+                <p class="mb-6 text-gray-700">Enter custom feature values to predict the motor temperature.</p>
+                <a href="/Manual" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                    Go to Manual Prediction
+                </a>
+            </div>
+
+            <!-- Sensor Prediction -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Sensor Prediction</h2>
+                <p class="mb-6 text-gray-700">Upload real sensor data (CSV) to get temperature predictions.</p>
+                <a href="/sensor" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                    Go to Sensor Prediction
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
