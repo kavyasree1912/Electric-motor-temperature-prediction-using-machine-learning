@@ -1,12 +1,8 @@
-# Datasets
-*.csv
-
-# ML Models
-*.pkl
-
-# Python cache
-__pycache__/
-
-# Virtual environments
+myenv/
 venv/
-env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.DS_Store
